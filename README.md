@@ -8,6 +8,14 @@ A simple [Riemann](http://riemann.io) client written in Erlang.
 
 This is alpha software. Things might still change in ways that break everything.
 
+### Docker
+
+```
+docker build -t katja .
+
+docker run -ti katja /bin/bash
+```
+
 ## Configuration
 
 ```erlang
