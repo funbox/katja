@@ -1,4 +1,6 @@
 .idea/
+.eunit/
+.rebar/
 .DS_Store
 .erlang.mk.*
 deps/
