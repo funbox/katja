@@ -98,7 +98,7 @@ Sending entities asynchronously is also possible. All of the methods mentioned a
 ### Querying
 
 ```erlang
-{ok, Events} = katja:query("service = \"katja demo\"").
+{ok, Events} = katja:query_msg("service = \"katja demo\"").
 ```
 
 A query returns a list of events. Events are in the format that you specify when sending data to Riemann.
@@ -125,7 +125,7 @@ end.
 
 All the methods mentioned above optionally take a `katja:process()` as their first argument, enabling Katja to easily work with existing process pool implementations. `katja:process()` is either a `pid()` or one of the two following atoms: `katja_writer`, `katja_reader`.
 
-The `atom()` cases usually don't have to be used directly, since `katja:send_event/1`, `katja:send_state/1`, `katja:query/1` etc. default to setting the correct value.
+The `atom()` cases usually don't have to be used directly, since `katja:send_event/1`, `katja:send_state/1`, `katja:query_msg/1` etc. default to setting the correct value.
 
 Additionally you can also "turn off" the `katja_writer` and `katja_reader` processes that are automatically started and supervised by adding their names to the `pool` configuration option.
 

@@ -36,7 +36,7 @@
   start_link/0,
   start_link/1,
   stop/1,
-  query/2,
+  query_msq/2,
   query_async/2,
   query_event/2,
   query_event_async/2
@@ -72,13 +72,13 @@ stop(Pid) ->
 % @doc Sends a query string to Riemann and returns a list of matching events.<br />
 %      Example queries can be found in the
 %      <a href="https://github.com/aphyr/riemann/blob/master/test/riemann/query_test.clj" target="_blank">Riemann test suite</a>.
--spec query(katja:process(), iolist()) -> {ok, [katja:event()]} | {error, term()}.
-query(Pid, Query) ->
+-spec query_msq(katja:process(), iolist()) -> {ok, [katja:event()]} | {error, term()}.
+query_msq(Pid, Query) ->
   Msg = create_query_message(Query),
-  gen_server:call(Pid, {query, Msg}).
+  gen_server:call(Pid, {query_msg, Msg}).
 
 % @doc Sends a query string to Riemann and returns the result asynchronously by sending a message to the caller.<br />
-%      See the {@link query/2} documentation for more details.
+%      See the {@link query_msq/2} documentation for more details.
 -spec query_async(katja:process(), iolist()) -> reference().
 query_async(Pid, Query) ->
   Ref = make_ref(),
@@ -86,14 +86,14 @@ query_async(Pid, Query) ->
   ok = gen_server:cast(Pid, {query_async, self(), Ref, Msg}),
   Ref.
 
-% @doc Takes an event and transforms it into a query string. The generated query string is passed to {@link query/2}.<br />
+% @doc Takes an event and transforms it into a query string. The generated query string is passed to {@link query_msq/2}.<br />
 %      Querying `attributes' is currently not supported, because Riemann itself does not provide a way to query events
 %      based on `attributes'.<br /><br />
 %      Converting `Event' to a query string happens inside the process calling this function.
 -spec query_event(katja:process(), katja:event()) -> {ok, [katja:event()]} | {error, term()}.
 query_event(Pid, Event) ->
   Query = create_query_string(Event),
-  query(Pid, Query).
+  query_msq(Pid, Query).
 
 % @doc Takes an event and transforms it into a query string. The generated query string is passed to {@link query_async/2}.<br />
 %      See the {@link query_event/2} documentation for more details.
@@ -110,7 +110,7 @@ init([]) ->
   {ok, State}.
 
 % @hidden
-handle_call({query, Msg}, _From, State) ->
+handle_call({query_msg, Msg}, _From, State) ->
   {Reply, State2} = send_message(Msg, State),
   {reply, Reply, State2};
 handle_call(terminate, _From, State) ->
@@ -144,7 +144,7 @@ code_change(_OldVsn, State, _Extra) ->
 -spec create_query_message(iolist()) -> riemannpb_message().
 create_query_message(Query) ->
   #riemannpb_msg{
-     query=#riemannpb_query{string=Query}
+     query_msg=#riemannpb_query{string=Query}
   }.
 
 -spec create_query_string(katja:event()) -> iolist().
@@ -210,7 +210,7 @@ set_event_field(_Field, _PbEvent, Event) -> Event.
 
 -ifdef(TEST).
 create_query_message_test() ->
-  ?assertMatch(#riemannpb_msg{query=#riemannpb_query{string="foo"}}, create_query_message("foo")).
+  ?assertMatch(#riemannpb_msg{query_msg=#riemannpb_query{string="foo"}}, create_query_message("foo")).
 
 create_query_string_test() ->
   F = fun(V) -> lists:flatten(V) end,

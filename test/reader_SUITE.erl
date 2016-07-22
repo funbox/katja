@@ -30,7 +30,7 @@
 
 % Tests
 -export([
-  query/1,
+  query_msg/1,
   query_pid/1,
   query_async/1,
   query_event/1,
@@ -43,7 +43,7 @@
 
 all() ->
   [
-    query,
+    query_msg,
     query_pid,
     query_async,
     query_event,
@@ -76,21 +76,21 @@ end_per_testcase(_Test, _Config) ->
 
 % Tests
 
-query(_Config) ->
-  {ok, [ServiceEvent]} = katja:query("service = \"katja 2\" and tagged \"query1\""),
+query_msg(_Config) ->
+  {ok, [ServiceEvent]} = katja:query_msg("service = \"katja 2\" and tagged \"query1\""),
   {metric, 9001} = lists:keyfind(metric, 1, ServiceEvent),
-  {ok, [AttrEvent]} = katja:query("service = \"katja 3\" and metric = 9002 and tagged \"query2\""),
+  {ok, [AttrEvent]} = katja:query_msg("service = \"katja 3\" and metric = 9002 and tagged \"query2\""),
   {attributes, [{"foo", "bar"}]} = lists:keyfind(attributes, 1, AttrEvent),
-  {ok, [MultiTagEvent]} = katja:query("service = \"katja 4\" and tagged \"query3\" and tagged \"query4\""),
+  {ok, [MultiTagEvent]} = katja:query_msg("service = \"katja 4\" and tagged \"query3\" and tagged \"query4\""),
   {metric, 9003} = lists:keyfind(metric, 1, MultiTagEvent).
 
 query_pid(Config) ->
   RPid = ?config(pid_reader, Config),
-  {ok, [ServiceEvent]} = katja:query(RPid, "service = \"katja 2\" and tagged \"query1\""),
+  {ok, [ServiceEvent]} = katja:query_msg(RPid, "service = \"katja 2\" and tagged \"query1\""),
   {metric, 9001} = lists:keyfind(metric, 1, ServiceEvent),
-  {ok, [AttrEvent]} = katja:query(RPid, "service = \"katja 3\" and metric = 9002 and tagged \"query2\""),
+  {ok, [AttrEvent]} = katja:query_msg(RPid, "service = \"katja 3\" and metric = 9002 and tagged \"query2\""),
   {attributes, [{"foo", "bar"}]} = lists:keyfind(attributes, 1, AttrEvent),
-  {ok, [MultiTagEvent]} = katja:query(RPid, "service = \"katja 4\" and tagged \"query3\" and tagged \"query4\""),
+  {ok, [MultiTagEvent]} = katja:query_msg(RPid, "service = \"katja 4\" and tagged \"query3\" and tagged \"query4\""),
   {metric, 9003} = lists:keyfind(metric, 1, MultiTagEvent).
 
 query_async(_Config) ->
