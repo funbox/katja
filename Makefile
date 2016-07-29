@@ -67,4 +67,12 @@ upload-docs: docs
 	$(gen_verbose) rsync -avz --no-o --no-g -e ssh --chmod=og=r -p --delete --exclude '*.edoc' --exclude 'edoc-info' doc/ webserver.kempkens.io:/var/www/nifoc/$(PROJECT)/$(PROJECT_VERSION)
 	@ssh webserver.kempkens.io chown -R www:www /var/www/nifoc/$(PROJECT)/$(PROJECT_VERSION)
 
+docker_build:
+		docker build -t katja .
+
+docker_run:
+		docker run -ti katja /bin/bash
+
+docker: docker_build docker_run
+
 .PHONY: clean-proto coverage-report upload-docs
