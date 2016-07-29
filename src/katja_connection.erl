@@ -66,8 +66,8 @@
 %      `Port': 5555
 -spec connect() -> {ok, state()} | {error, term()}.
 connect() ->
-  Host = application:get_env(katja, host, ?DEFAULT_HOST),
-  Port = application:get_env(katja, port, ?DEFAULT_PORT),
+  Host = katja_application:get_env(katja, host, ?DEFAULT_HOST),
+  Port = katja_application:get_env(katja, port, ?DEFAULT_PORT),
   connect(Host, Port).
 
 % @doc Tries to connect to Riemann via UDP and TCP using the specified `Host' and `Port'.<br />
@@ -75,7 +75,7 @@ connect() ->
 %      entities (events and/or states) that are sent to Riemann, since querying always uses TCP.
 -spec connect(string(), pos_integer()) -> {ok, state()} | {error, term()}.
 connect(Host, Port) ->
-  Transport = application:get_env(katja, transport, ?DEFAULT_TRANSPORT),
+  Transport = katja_application:get_env(katja, transport, ?DEFAULT_TRANSPORT),
   State = #connection_state{host=Host, port=Port, transport=Transport},
   case maybe_connect_udp(State) of
     {ok, State2} -> maybe_connect_tcp(State2);
@@ -89,8 +89,8 @@ connect(Host, Port) ->
 %      `Port': 5555
 -spec connect_udp() -> {ok, state()} | {error, term()}.
 connect_udp() ->
-  Host = application:get_env(katja, host, ?DEFAULT_HOST),
-  Port = application:get_env(katja, port, ?DEFAULT_PORT),
+  Host = katja_application:get_env(katja, host, ?DEFAULT_HOST),
+  Port = katja_application:get_env(katja, port, ?DEFAULT_PORT),
   connect_udp(Host, Port).
 
 % @doc Tries to connect to Riemann via UDP using the specified `Host' and `Port'.
@@ -106,8 +106,8 @@ connect_udp(Host, Port) ->
 %      `Port': 5555
 -spec connect_tcp() -> {ok, state()} | {error, term()}.
 connect_tcp() ->
-  Host = application:get_env(katja, host, ?DEFAULT_HOST),
-  Port = application:get_env(katja, port, ?DEFAULT_PORT),
+  Host = katja_application:get_env(katja, host, ?DEFAULT_HOST),
+  Port = katja_application:get_env(katja, port, ?DEFAULT_PORT),
   connect_tcp(Host, Port).
 
 % @doc Tries to connect to Riemann via TCP using the specified `Host' and `Port'.

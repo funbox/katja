@@ -261,7 +261,7 @@ set_state_field(once, V, S) -> S#riemannpb_state{once=V}.
 
 -spec default_hostname() -> iolist().
 default_hostname() ->
-  Defaults = application:get_env(katja, defaults, ?DEFAULT_DEFAULTS),
+  Defaults = katja_application:get_env(katja, defaults, ?DEFAULT_DEFAULTS),
   case lists:keyfind(host, 1, Defaults) of
     {host, Host} -> hostname_value(Host);
     false ->
@@ -271,7 +271,7 @@ default_hostname() ->
 
 -spec default_tags() -> [iolist()].
 default_tags() ->
-  Defaults = application:get_env(katja, defaults, ?DEFAULT_DEFAULTS),
+  Defaults = katja_application:get_env(katja, defaults, ?DEFAULT_DEFAULTS),
   case lists:keyfind(tags, 1, Defaults) of
     {tags, Tags} -> tag_values(Tags);
     false -> []
@@ -279,7 +279,7 @@ default_tags() ->
 
 -spec default_ttl() -> float() | undefined.
 default_ttl() ->
-  Defaults = application:get_env(katja, defaults, ?DEFAULT_DEFAULTS),
+  Defaults = katja_application:get_env(katja, defaults, ?DEFAULT_DEFAULTS),
   case lists:keyfind(ttl, 1, Defaults) of
     {ttl, TTL} -> TTL;
     false -> undefined

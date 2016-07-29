@@ -37,7 +37,8 @@ message RiemannPB_Msg {
   optional bool ok = 2;
   optional string error = 3;
   repeated RiemannPB_State states = 4;
-  optional RiemannPB_Query query = 5;
+  // TODO: "query" has been replaced to "query_msg", need to check
+  optional RiemannPB_Query query_msg = 5;
   repeated RiemannPB_Event events = 6;
 }
 

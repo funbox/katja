@@ -103,8 +103,8 @@
   send_entities_async/2,
   send_entities_async/3,
   send_entities_async/4,
-  query/1,
-  query/2,
+  query_msq/1,
+  query_msq/2,
   query_async/1,
   query_async/2,
   query_event/1,
@@ -304,15 +304,15 @@ send_entities_async(Pid, Transport, Data) ->
 send_entities_async(Pid, Transport, Data, SampleRate) ->
   katja_writer:send_entities_async(Pid, Transport, Data, SampleRate).
 
-% @doc Delegates to {@link query/2}. `Pid' is set to `katja_reader'.
--spec query(string()) -> {ok, [event()]} | {error, term()}.
-query(Query) ->
-  query(katja_reader, Query).
+% @doc Delegates to {@link query_msq/2}. `Pid' is set to `katja_reader'.
+-spec query_msq(string()) -> {ok, [event()]} | {error, term()}.
+query_msq(Query) ->
+  query_msq(katja_reader, Query).
 
-% @doc Delegates to {@link katja_reader:query/2}.
--spec query(process(), string()) -> {ok, [event()]} | {error, term()}.
-query(Pid, Query) ->
-  katja_reader:query(Pid, Query).
+% @doc Delegates to {@link katja_reader:query_msq/2}.
+-spec query_msq(process(), string()) -> {ok, [event()]} | {error, term()}.
+query_msq(Pid, Query) ->
+  katja_reader:query_msq(Pid, Query).
 
 % @doc Delegates to {@link query_async/2}. `Pid' is set to `katja_reader'.
 -spec query_async(string()) -> reference().
